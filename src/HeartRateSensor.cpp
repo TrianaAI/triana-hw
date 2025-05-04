@@ -63,3 +63,7 @@ void HeartRateSensor::resetValues() {
     beatsPerMinute = 0;
     beatAvg = 0;
 }
+
+int HeartRateSensor::getAverageBPM() {
+    return beatAvg; // Return the average BPM
+}

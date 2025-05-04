@@ -8,6 +8,7 @@ public:
     HeartRateSensor();
     void begin();
     void update();
+    int getAverageBPM(); // New method to get the average BPM
 
 private:
     MAX30105 particleSensor;

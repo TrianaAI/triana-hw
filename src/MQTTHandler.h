@@ -10,6 +10,7 @@ public:
     void loop();
     void publish(const char* topic, const char* payload);
     void subscribe(const char* topic);
+    bool isHeartRateScanEnabled(); // New method to check if heart rate scanning is enabled
 
 private:
     PubSubClient mqttClient;
