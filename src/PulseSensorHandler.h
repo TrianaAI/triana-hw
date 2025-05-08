@@ -2,17 +2,20 @@
 #define PULSE_SENSOR_HANDLER_H
 
 #include <PulseSensorPlayground.h>
+#include "FirebaseAsyncHandler.h"
 
 class PulseSensorHandler {
 public:
     PulseSensorHandler();
     void begin();
     void update();
+    // void updateWithFirebase(FirebaseAsyncHandler &firebaseHandler); // Pass FirebaseAsyncHandler reference
 
 private:
     const int PulseWire = 6;
     int Threshold = 550;
     PulseSensorPlayground pulseSensor;
+    bool checkingActivation = false;
 };
 
 #endif // PULSE_SENSOR_HANDLER_H
