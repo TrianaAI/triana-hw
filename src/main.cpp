@@ -12,8 +12,8 @@ FirebaseAsyncHandler firebaseAsyncHandler;
 
 void mlxTask(void* parameter) {
     for (;;) {
-        // mlxHandler.update();
-        // mlxHandler.updateWithFirebase(firebaseAsyncHandler); // Pass FirebaseAsyncHandler reference
+        mlxHandler.update(firebaseAsyncHandler); // Pass FirebaseAsyncHandler reference
+        mlxHandler.updateWithFirebase(firebaseAsyncHandler); // Pass FirebaseAsyncHandler reference
         vTaskDelay(500 / portTICK_PERIOD_MS); // Delay to match the original loop delay
     }
 }
@@ -26,12 +26,12 @@ void pulseSensorTask(void* parameter) {
     }
 }
 
-// void firebaseTask(void* parameter) {
-//     for (;;) {
-//         firebaseAsyncHandler.update();
-//         vTaskDelay(10 / portTICK_PERIOD_MS); // Adjust delay as needed
-//     }
-// }
+void firebaseTask(void* parameter) {
+    for (;;) {
+        // firebaseAsyncHandler.update();
+        vTaskDelay(10 / portTICK_PERIOD_MS); // Adjust delay as needed
+    }
+}
 
 void setup() {
     Serial.begin(115200);
@@ -48,14 +48,14 @@ void setup() {
     // firebaseAsyncHandler.update(); // Call update to initialize Firebase connection
 
     // Create tasks for Heart Rate Sensor and MLX90614 sensor
-    xTaskCreate(mlxTask, "MLX90614 Task", 4096, NULL, 1, NULL);
+    xTaskCreate(mlxTask, "MLX90614 Task", 8192, NULL, 1, NULL);
     xTaskCreate(pulseSensorTask, "Pulse Sensor Task", 4096, NULL, 1, NULL);
-    // xTaskCreate(firebaseTask, "Firebase Task", 8192, NULL, 1, NULL);
+    xTaskCreate(firebaseTask, "Firebase Task", 8192, NULL, 1, NULL);
 }
 
 void loop() {
     // Main loop does nothing, tasks handle everything
     vTaskDelay(1000 / portTICK_PERIOD_MS); // Prevent watchdog timer reset
-    firebaseAsyncHandler.update(); // Call update to process Firebase tasks
-    delay(10);
+    // firebaseAsyncHandler.update(); // Call update to process Firebase tasks
+    // delay(10);
 }

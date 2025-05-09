@@ -8,12 +8,15 @@ class MLX90614Handler {
 public:
     MLX90614Handler();
     void begin();
-    void update();
-    // void updateWithFirebase(FirebaseAsyncHandler &firebaseHandler); // Pass FirebaseAsyncHandler reference
-
+    void updateWithFirebase(FirebaseAsyncHandler &firebaseHandler);
+    void update(FirebaseAsyncHandler &firebaseHandler);
+    
 private:
     Adafruit_MLX90614 mlx;
-    bool checkingActivation = false;
+    bool isSampling = false;
+    int sampleCount = 0;
+    float ambientSum = 0.0f;
+    float objectSum = 0.0f;
 };
 
-#endif // MLX90614_HANDLER_H
+#endif
