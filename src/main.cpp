@@ -24,14 +24,13 @@ void loop() {
         String input = Serial.readStringUntil('\n');
         input.trim(); // Remove any extra whitespace or newline characters
 
-        Serial.print("Received command: ");
-        Serial.println(input);
+        // Serial.print("Received command: ");
+        // Serial.println(input);
 
         // Process the input
         if (input == "start pulse") {
             pulseSensorHandler.update();
         } else if (input == "start mlx") {
-            Serial.println("Starting MLX90614 sensor...");
             mlxHandler.update();
         } else {
             Serial.println("Unknown command.");
