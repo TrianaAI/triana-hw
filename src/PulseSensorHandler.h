@@ -2,7 +2,6 @@
 #define PULSE_SENSOR_HANDLER_H
 
 #include <PulseSensorPlayground.h>
-#include "FirebaseAsyncHandler.h"
 
 class PulseSensorHandler {
 public:
@@ -15,7 +14,7 @@ private:
     const int PulseWire = 6;
     int Threshold = 550;
     PulseSensorPlayground pulseSensor;
-    bool checkingActivation = false;
+    bool isSampling = false;
 };
 
 #endif // PULSE_SENSOR_HANDLER_H

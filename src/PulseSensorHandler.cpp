@@ -1,6 +1,5 @@
 #include "PulseSensorHandler.h"
 #include <Arduino.h>
-#include "FirebaseAsyncHandler.h" // Include the header for FirebaseAsyncHandler
 
 PulseSensorHandler::PulseSensorHandler() : pulseSensor() {}
 
@@ -15,14 +14,42 @@ void PulseSensorHandler::begin() {
     }
 }
 
+// void PulseSensorHandler::update() {
+//     static int sampleCount = 0;
+//     static int bpmSum = 0;
+
+//     if (pulseSensor.sawStartOfBeat()) {
+//         int myBPM = pulseSensor.getBeatsPerMinute();
+//         bpmSum += myBPM;
+//         sampleCount++;
+
+//         if (sampleCount >= 3) { // Take 3 samples and calculate the average
+//             int averageBPM = bpmSum / sampleCount;
+//             // Serial.println("♥  A HeartBeat Happened ! ");
+//             // Serial.print("Average BPM: ");
+//             Serial.println(averageBPM);
+
+//             // Reset counters for the next batch
+//             sampleCount = 0;
+//             bpmSum = 0;
+//         }
+//     }
+//     delay(20);
+// }
+
 void PulseSensorHandler::update() {
-    if (pulseSensor.sawStartOfBeat()) {
-        int myBPM = pulseSensor.getBeatsPerMinute();
-        Serial.println("♥  A HeartBeat Happened ! ");
-        Serial.print("BPM: ");
-        Serial.println(myBPM);
-    }
-    delay(20);
+    int myBPM = 0;
+    do
+    {
+        if (pulseSensor.sawStartOfBeat()) {
+            myBPM = pulseSensor.getBeatsPerMinute();
+            // Serial.print("♥  A HeartBeat Happened ! ");
+            // Serial.print("BPM: ");
+            Serial.println(myBPM);
+        }
+        delay(20); // Adjust delay as needed
+    } while (myBPM == 0);
+    
 }
 
 // void PulseSensorHandler::updateWithFirebase(FirebaseAsyncHandler &firebaseHandler) {
