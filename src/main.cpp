@@ -2,58 +2,39 @@
 #include <Wire.h>
 #include <SPI.h>
 #include <WiFi.h>
-#include "HeartRateSensor.h"
-#include "MQTTHandler.h"
+#include "MLX90614Handler.h"
+#include "PulseSensorHandler.h"
 
-const char* ssid = "saf";
-const char* password = "safer123";
-const char* mqttServer = "broker.emqx.io";
-const uint16_t mqttPort = 1883;
-
-WiFiClient wifiClient;
-MQTTHandler mqttHandler(wifiClient, mqttServer, mqttPort);
-HeartRateSensor heartRateSensor;
-
-void mqttTask(void* parameter) {
-    for (;;) {
-        mqttHandler.loop();
-        vTaskDelay(100 / portTICK_PERIOD_MS); // Delay to prevent task hogging CPU
-    }
-}
-
-void heartRateTask(void* parameter) {
-    for (;;) {
-        heartRateSensor.update();
-        vTaskDelay(100 / portTICK_PERIOD_MS); // Delay to prevent task hogging CPU
-    }
-}
+MLX90614Handler mlxHandler;
+PulseSensorHandler pulseSensorHandler;
 
 void setup() {
     Serial.begin(115200);
 
-    // Connect to WiFi
-    Serial.print("Connecting to WiFi");
-    WiFi.begin(ssid, password);
-    while (WiFi.status() != WL_CONNECTED) {
-        delay(1000);
-        Serial.print(".");
-    }
-    Serial.println(" connected");
+    // Initialize MLX90614 sensor
+    mlxHandler.begin();
 
-    // Initialize MQTT
-    mqttHandler.begin();
-
-    // Initialize Heart Rate Sensor
-    heartRateSensor.begin();
-
-    // Create tasks for MQTT and Heart Rate Sensor
-    xTaskCreate(mqttTask, "MQTT Task", 4096, NULL, 1, NULL);
-    xTaskCreate(heartRateTask, "Heart Rate Task", 4096, NULL, 1, NULL);
+    // Initialize Pulse Sensor
+    pulseSensorHandler.begin();
 }
 
 void loop() {
-    // Main loop does nothing, tasks handle everything
-    vTaskDelay(1000 / portTICK_PERIOD_MS); // Prevent watchdog timer reset
-    // You can also add other code here if needed
-    // mqttHandler.publish("triana/test", "Hello from Triana!");
+    if (Serial.available()) {
+        // Read the incoming data as a string until a newline character
+        String input = Serial.readStringUntil('\n');
+        input.trim(); // Remove any extra whitespace or newline characters
+
+        Serial.print("Received command: ");
+        Serial.println(input);
+
+        // Process the input
+        if (input == "start pulse") {
+            pulseSensorHandler.update();
+        } else if (input == "start mlx") {
+            Serial.println("Starting MLX90614 sensor...");
+            mlxHandler.update();
+        } else {
+            Serial.println("Unknown command.");
+        }
+    }
 }
