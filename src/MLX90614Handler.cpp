@@ -10,7 +10,7 @@ void MLX90614Handler::begin() {
     Serial.println("MLX90614 initialized");
 }
 
-void MLX90614Handler::update() {
+float MLX90614Handler::update() {
     float totalTemp = 0.0;
     const int sampleCount = 5;
 
@@ -21,4 +21,5 @@ void MLX90614Handler::update() {
 
     float averageTemp = totalTemp / sampleCount;
     Serial.println(averageTemp);
+    return averageTemp;
 }
