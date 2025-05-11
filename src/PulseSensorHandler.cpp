@@ -14,7 +14,7 @@ void PulseSensorHandler::begin() {
     }
 }
 
-void PulseSensorHandler::update() {
+int PulseSensorHandler::update() {
     int myBPM = 0;
     do
     {
@@ -27,4 +27,5 @@ void PulseSensorHandler::update() {
         delay(20); // Adjust delay as needed
     } while (myBPM == 0);
     
+    return myBPM;
 }

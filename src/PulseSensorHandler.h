@@ -7,7 +7,7 @@ class PulseSensorHandler {
 public:
     PulseSensorHandler();
     void begin();
-    void update();
+    int update();
     // void updateWithFirebase(FirebaseAsyncHandler &firebaseHandler); // Pass FirebaseAsyncHandler reference
 
 private:

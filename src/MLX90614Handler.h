@@ -7,7 +7,7 @@ class MLX90614Handler {
 public:
     MLX90614Handler();
     void begin();
-    void update();
+    float update();
     
 private:
     Adafruit_MLX90614 mlx;
